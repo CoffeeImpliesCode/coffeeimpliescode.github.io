@@ -1,1 +1,2 @@
-# coffeeimpliescode.com coffeeimpliescode.github.io Blog
+# coffeeimpliescode.github.io
+Blog page.
