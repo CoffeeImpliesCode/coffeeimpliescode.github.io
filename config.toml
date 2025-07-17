@@ -1,5 +1,5 @@
 # The URL the site will be built for
-base_url = "https://blog.dark-flames.com"
+base_url = "https://coffeeimpliescode.com"
 
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
@@ -11,7 +11,6 @@ theme = "apollo"
 
 taxonomies = [{ name = "tags", feed = true }]
 
-
 [markdown]
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
@@ -19,16 +18,22 @@ highlight_code = true
 
 [extra]
 menu = [
-  { name = "/posts", url = "/posts", weight = 1 },
-  { name = "/tags", url = "/tags", weight = 2 },
-  { name = "/about", url = "/about", weight = 3 },
+  { name = "coffeeimpliescode", url = "/", weight = 1 },
+  { name = "/posts", url = "/posts", weight = 2 },
+  { name = "/tags", url = "/tags", weight = 3 },
+  { name = "/about", url = "/about", weight = 4 },
+  # { name = "/projects", url = "/projects", weight = 5},
 ]
+
+toc = true
+
 mathjax = true
 mathjax_dollar_inline_enable = true
 
 socials = [
-  { name = "twitter", url = "https://twitter.com/Darkf1ames", icon = "twitter" },
-  { name = "github", url = "https://github.com/dark-flames", icon = "github" },
+  # { name = "twitter", url = "https://twitter.com/Darkf1ames", icon = "twitter" },
+  { name = "github", url = "https://github.com/CoffeeImpliesCode", icon = "github" },
+  # { name = "ko-fi", url = "https://ko-fi.com/CoffeeImpliesCode", icon = "ko-fi"},
 ]
 
 insert_anchor_links = "heading"

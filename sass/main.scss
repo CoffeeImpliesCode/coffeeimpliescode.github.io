@@ -11,6 +11,7 @@
 :root {
   /* Used for: block comment, hr, ... */
   --border-color: var(--border-color);
+  --fn-color: color-mix(in oklab, var(--text-0), var(--bg-0));
 
   /* Fonts */
   --text-font: 'Jetbrains Mono';
@@ -30,6 +31,20 @@ html {
   margin: 0 auto;
   padding: 0 12px;
   word-wrap: break-word;
+}
+
+// .typst-dom-page {
+//   --text-font: 'Space Grotesk';
+//   font: var(--text-font);
+// }
+
+.footnote-definition {
+  color: var(--fn-color);
+  display: inline;
+}
+
+.footnote-definition p {
+  display: inline;
 }
 
 @media all and (min-width:600px) {

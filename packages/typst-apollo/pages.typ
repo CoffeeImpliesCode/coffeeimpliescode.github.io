@@ -69,6 +69,7 @@
       rest: 0pt,
     ),
     // for a website, we don't need pagination.
+    fill: bg-color,
     height: auto,
   ) if is-web-target
 
@@ -114,12 +115,13 @@
   // link setting
   show link: set text(fill: dash-color)
 
+
   // math setting
-  show math.equation: set text(weight: 400)
+  show math.equation: set text(weight: 400, font: math-font)
 
   // code block setting
   show raw: it => {
-    set text(font: code-font)
+    set text(font: code-font, ligatures: true)
     if "block" in it.fields() and it.block {
       rect(
         width: 100%,
@@ -158,11 +160,23 @@
       ),
     )
   }
+  // refs without numbering!
+  show ref: it => {
+    if it != none and it.element != none and it.element.numbering == none {
+      link(it.target, it.element.body)
+    } else {
+      it
+    }
+  }
 
   // Main body.
+
   set par(justify: true)
+  set heading(numbering: none) 
 
   body
 }
 
 #let part-style = heading
+
+

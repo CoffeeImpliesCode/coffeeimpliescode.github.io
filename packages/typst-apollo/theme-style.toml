@@ -5,9 +5,11 @@ color-scheme = "light"
 main-color = "#000"
 dash-color = "#ef5350"
 code-theme = ""
+bg-color = "#ffd2ba"
 
 [dark]
 color-scheme = "dark"
 main-color = "#ffffff"
 dash-color = "#ef5350"
 code-theme = "tokyo-night.tmTheme.xml"
+bg-color = "#160400"

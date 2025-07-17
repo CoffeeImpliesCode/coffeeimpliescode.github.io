@@ -10,18 +10,23 @@
 
 #let main-color = rgb(theme-style.at("main-color"))
 #let dash-color = rgb(theme-style.at("dash-color"))
+#let bg-color = rgb(theme-style.at("bg-color"))
 
 
 #let main-font = (
-  "Charter",
-  "Source Han Serif SC",
-  "Source Han Serif TC",
-  "Linux Libertine",
+  "Space Grotesk",
+  "Jetbrains Mono",
+  "STIX Two Text",
 )
 
 #let code-font = (
+  "Jetbrains Mono",
   "BlexMono Nerd Font Mono",
-  "DejaVu Sans Mono",
+)
+
+#let math-font = (
+  "Latin Modern Math",
+  "STIX Two Math",
 )
 
 #let code-theme-file = theme-style.at("code-theme")
