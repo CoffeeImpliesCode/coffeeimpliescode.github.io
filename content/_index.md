@@ -11,30 +11,35 @@ template = "homepage.html"
 
 > "What Andy giveth, Bill taketh away."
 > 
-> —  <cite>[Niklaus Emil Wirth](https://en.wikipedia.org/Niklaus_Wirth)</cite> [^*]
+> — <cite>[Niklaus Emil Wirth](https://en.wikipedia.org/Niklaus_Wirth)</cite> [^*]
 
-> "Computers are like air conditioners —  they stop working if you open Windows." 
+> "Computers are like air conditioners — they stop working if you open Windows." 
 >
-> —  <cite> Unknown </cite>
+> — <cite> Unknown </cite>
 
 > "Any problem in computer science can be solved by another level of indirection."
 > 
-> —  <cite> [David Wheeler](https://en.wikipedia.org/wiki/David_Wheeler_(computer_scientist)) </cite> 
+> — <cite> [David Wheeler](https://en.wikipedia.org/wiki/David_Wheeler_(computer_scientist)) </cite> 
 
 > "There's too much blood in my caffeine system."
 >
-> —  <cite> Unknown </cite>
+> — <cite> Unknown </cite>
 
-> "Software and cathedrals are much the same —  first we build them, then we pray."
+> The most treacherous metaphors are the ones that seem to work for a time, because they can keep more powerful insights from bubbling up.
+> 
+> — <cite> Alan Kay </cite>
+
+
+> "Software and cathedrals are much the same — first we build them, then we pray."
 >
-> —  <cite> Samuel T. Redwine, Jr. </cite> 
+> — <cite> Samuel T. Redwine, Jr. </cite> 
 
 > "I think computer science is a liberal arts discipline."
 > 
-> —  <cite> [Vinton Gray Cerf](https://en.wikipedia.org/wiki/Vint_Cerf) </cite>
+> — <cite> [Vinton Gray Cerf](https://en.wikipedia.org/wiki/Vint_Cerf) </cite>
 
 > "I don’t care if it works on your machine! We are not shipping your machine!"
 > 
-> —  <cite> Vidar Brein-Karlsen </cite>
+> — <cite> Vidar Brein-Karlsen </cite>
 
 [^*]: <small>Some wording may have been lost in translation. He's swiss, after all.</small>
