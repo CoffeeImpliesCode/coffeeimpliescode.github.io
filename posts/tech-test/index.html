@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<html class="dark light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+
+    
+    
+    
+    <title>
+         Tech Test
+        
+    </title>
+
+        
+            <meta property="og:title" content="Tech Test" />
+        
+     
+
+     
+         
+     
+
+     
+         
+    
+
+    
+    
+
+    
+    
+        <link href=https://blog.coffeeimpliescode.com/fonts.css rel="stylesheet" />
+    
+
+    
+    
+
+    
+    
+
+    
+    
+        <script src=https://blog.coffeeimpliescode.com/js/toc.js></script>
+    
+    
+    
+    
+        <script src=https://blog.coffeeimpliescode.com/js/note.js></script>
+    
+
+    
+        
+            <script>
+            MathJax = {
+              tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+              }
+            };
+            </script>
+        
+        <script type="text/javascript" id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+    
+
+    
+        <script type="module" src=https://blog.coffeeimpliescode.com/apollo-typst/apollo.typst.mjs></script>
+        <link rel="stylesheet" href=https://blog.coffeeimpliescode.com/apollo-typst/apollo.typst.css>
+        <script>
+            /// https://segmentfault.com/a/1190000016574288
+            (function () {
+                var ie = !!(window.attachEvent && !window.opera);
+                var wk = /webkit\/(\d+)/i.test(navigator.userAgent) && RegExp.$1 < 400;
+                var fn = [];
+                var run = function () {
+                    for (var i = 0; i < fn.length; i++) fn[i]();
+                };
+                var d = document;
+                d.ready = function (f) {
+                    if (!ie && !wk && d.addEventListener) return d.addEventListener('DOMContentLoaded', f, false);
+                    if (fn.push(f) > 1) return;
+                    if (ie)
+                        (function () {
+                            try {
+                                d.documentElement.doScroll('left');
+                                run();
+                            } catch (err) {
+                                setTimeout(arguments.callee, 0);
+                            }
+                        })();
+                    else if (wk)
+                        var t = setInterval(function () {
+                            if (/^(loaded|complete)$/.test(d.readyState)) clearInterval(t), run();
+                        }, 0);
+                };
+            })();
+
+            window.captureStack = function() { }
+            window.getTypstTheme = function() { return getSavedTheme(); };
+        </script>
+        <script>
+            window.updateScale = function () {
+                const appElem = document.getElementById('typst-app');
+                const appWidth = appElem.offsetWidth;
+
+                appElem.style.setProperty('--typst-dom-scale', window.calcScale(appWidth));
+            }
+
+            window.typstBindSvgDom = function () {
+                window.updateScale();
+                return undefined;
+            };
+            window.captureStack = function () {
+                return undefined;
+            };
+               
+            document.addEventListener("DOMContentLoaded", () => {
+                // todo: less copy, we can reuse the code among the hexo/shiroa/apollo?
+                const appElem = document.getElementById('typst-app');
+                window.updateScale();
+
+                let plugin = window.TypstRenderModule.createTypstRenderer();
+                plugin
+                .init({
+                    getModule: () =>
+                        'https://blog.coffeeimpliescode.com/wasm/typst_ts_renderer_bg.wasm',
+                })
+                .then(() => {
+                    window.typstBookRenderPage(plugin, 'https://blog.coffeeimpliescode.com/typst/posts/2025-07-14-tech-test', appElem);
+                });
+            });
+          </script>
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="" href="https://blog.coffeeimpliescode.com/atom.xml">
+
+
+    
+    
+        <link rel="stylesheet" type="text/css" href=https://blog.coffeeimpliescode.com/theme/light.css />
+        <link id="darkModeStyle" rel="stylesheet" type="text/css" href="https://blog.coffeeimpliescode.com/theme/dark.css" />
+    
+
+    <!-- Set the correct theme in the script -->
+    <script src=https://blog.coffeeimpliescode.com/js/themetoggle.js></script>
+    
+        <script>setTheme(getSavedTheme());</script>
+    
+
+    <link rel="stylesheet" type="text/css" media="screen" href=https://blog.coffeeimpliescode.com/main.css />
+
+    
+</head>
+
+
+<body>
+    <div class="content">
+        <header>
+    <div class="main">
+        <a href=https:&#x2F;&#x2F;blog.coffeeimpliescode.com></a>
+
+        <div class="socials">
+            
+            <a rel="me" href="https:&#x2F;&#x2F;github.com&#x2F;CoffeeImpliesCode" class="social">
+                <img alt=github src=https://blog.coffeeimpliescode.com/social_icons/github.svg>
+            </a>
+            
+        </div>
+    </div>
+
+    <nav>
+        
+        <a href=https://blog.coffeeimpliescode.com style="margin-left: 0.5em">coffeeimpliescode</a>
+        
+        <a href=https://blog.coffeeimpliescode.com/posts style="margin-left: 0.5em">&#x2F;posts</a>
+        
+        <a href=https://blog.coffeeimpliescode.com/tags style="margin-left: 0.5em">&#x2F;tags</a>
+        
+        <a href=https://blog.coffeeimpliescode.com/about style="margin-left: 0.5em">&#x2F;about</a>
+        
+
+        
+        |<a id="dark-mode-toggle" onclick="toggleTheme(); typstChangeTheme(); event.preventDefault();" href="#">
+            <img src=https://blog.coffeeimpliescode.com/feather/sun.svg id="sun-icon" style="filter: invert(1);" alt="Light" />
+            <img src=https://blog.coffeeimpliescode.com/feather/moon.svg id="moon-icon" alt="Dark" />
+        </a>
+
+        <!-- Inititialize the theme toggle icons -->
+        <script>updateItemToggleTheme()</script>
+        
+    </nav>
+</header>
+
+
+        
+        
+    
+        
+<main>
+    <article>
+        
+            <div class="title">
+                
+                
+    <div class="page-header">
+        Tech Test<span class="primary-color" style="font-size: 1.6em">.</span>
+    </div>
+
+
+                    <div class="meta">
+                        
+                            Posted on <time>2025-07-14</time>
+                        
+
+                        
+
+                        
+
+                        
+                        
+                                <span class="tags-label"> :: Tags:</span>
+                                <span class="tags">
+                                        <a href="https://blog.coffeeimpliescode.com/tags/math/" class="post-tag">math</a>
+                                    
+                                </span>
+                        
+
+                        
+                        
+
+                        
+
+                    </div>
+            </div>
+            <br />
+        
+
+        
+
+        <section class="body">
+            
+                <div id="typst-app" class="typst-app with-title"></div>
+            
+        </section>
+
+        <script src=https://blog.coffeeimpliescode.com/svg_utils.js></script>
+    </article>
+</main>
+
+    
+    
+
+
+        
+
+    </div>
+</body>
+
+</html>
