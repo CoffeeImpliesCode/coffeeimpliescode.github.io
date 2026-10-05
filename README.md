@@ -57,40 +57,26 @@ in that project's `build.zig`. Do **not** use an executable root: `build-obj` ha
 package manager, so a root that imports a module by name (`@import("zmath")`) fails
 with `no module named 'zmath' available within module 'main'`.
 
-Verify a candidate locally before adding it:
-
-```sh
-git clone --depth 1 https://github.com/OWNER/REPO && cd REPO
-zig build-obj src/root.zig -femit-docs=/tmp/docs -femit-bin=/tmp/repo.o
-```
-
-Exit status is the only gate that matters. Autodoc writes all four files even when
-semantic analysis fails, and `index.html`, `main.js` and `main.wasm` are byte-identical
-boilerplate for every project — the per-project content is entirely in
-`sources.tar`.
-
 ## Private repositories
 
-`projects.json` currently lists only the **public** libraries. The default
-`GITHUB_TOKEN` cannot read any other repository, private or not, so a private entry
-fails at checkout with `Repository not found`.
-
-These repositories build autodoc fine and only need cross-repository access:
-
-`notui`, `ocean`, `ozai`, `predicates`, `random123`, `simd`, `skript`, `topology`,
-`translate-rust`, `zautomerge`, `zig-agent-proto`, `zig-interval`, `zig-ndk`,
-`zmath`.
-
-To publish them, add a `DOCS_TOKEN` repository secret holding a token with access to
-those repositories (a classic PAT with `repo` scope, or a fine-grained token with
-*Contents: read* on each one). The checkout step already reads it:
+Most of the listed libraries are private. The default `GITHUB_TOKEN` cannot read
+another repository, so checkout uses a fine-grained token stored as the
+`DOCS_TOKEN` repository secret:
 
 ```yaml
 token: ${{ secrets.DOCS_TOKEN || github.token }}
 ```
 
-Then move the entries back into `projects.json`. Note that their documentation becomes
-readable by anyone on the site, private repository or not.
+The token is named `Zig autodoc`, expires **2027-01-03**, and grants *Contents:
+read-only* on fourteen repositories. It never grants write access, so it cannot
+push anything. When it expires the private libraries drop off the site and their
+rows appear as missing — regenerate the token and update the secret to bring them
+back. Rotate it by deleting the token at
+<https://github.com/settings/personal-access-tokens> and repeating
+`gh secret set DOCS_TOKEN --repo CoffeeImpliesCode/coffeeimpliescode.github.io`.
+
+Adding a library that is not covered by the token means regenerating it with that
+repository selected, or making the library public.
 
 ## Why `sources.tar` is stripped
 
