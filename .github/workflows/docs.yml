@@ -97,10 +97,13 @@ jobs:
           tar -cf "$site/sources.tar" -C "$strip" $(ls "$strip")
           du -sh "$site"
 
+      # Upload the parent directory, not the library's own: an artifact
+      # uploaded from <site>/<name> carries the four files at its root, and
+      # merge-multiple would collapse every library into one directory.
       - uses: actions/upload-artifact@v4
         with:
           name: docs-${{ matrix.project.name }}
-          path: ${{ runner.temp }}/site/${{ matrix.project.name }}
+          path: ${{ runner.temp }}/site
           retention-days: 1
 
   deploy:
