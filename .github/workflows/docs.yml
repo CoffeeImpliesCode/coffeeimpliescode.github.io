@@ -1,0 +1,142 @@
+name: Zig autodoc
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "23 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  ZIG_VERSION: "0.16.0"
+
+jobs:
+  config:
+    name: Read project matrix
+    runs-on: ubuntu-latest
+    outputs:
+      projects: ${{ steps.matrix.outputs.projects }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: matrix
+        run: echo "projects=$(jq -c '.' projects.json)" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: ${{ matrix.project.name }}
+    needs: config
+    runs-on: ubuntu-latest
+    strategy:
+      # One broken library must not cancel the other legs: the deploy job
+      # publishes whatever built, and the landing page lists the rest as
+      # missing rather than pretending they do not exist.
+      fail-fast: false
+      matrix:
+        project: ${{ fromJSON(needs.config.outputs.projects) }}
+    steps:
+      - name: Check out ${{ matrix.project.name }}
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ matrix.project.repo }}
+          ref: ${{ matrix.project.ref }}
+          path: checkout/${{ matrix.project.name }}
+
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: ${{ env.ZIG_VERSION }}
+
+      - name: Build autodoc
+        env:
+          PROJECT: ${{ matrix.project.name }}
+          ROOT: ${{ matrix.project.root }}
+        run: |
+          set -euo pipefail
+          site="$RUNNER_TEMP/site/$PROJECT"
+          mkdir -p "$site" "$RUNNER_TEMP/obj"
+          cd "checkout/$PROJECT"
+
+          # The library root from projects.json, never an executable root:
+          # a root that imports a module by name cannot resolve without the
+          # package manager. -femit-bin must be explicit too, otherwise zig
+          # drops <stem>.o into the checkout. Autodoc writes all four files
+          # even when semantic analysis fails, so the non-zero exit below is
+          # the only trustworthy gate.
+          zig build-obj "$ROOT" \
+            -femit-docs="$site" \
+            -femit-bin="$RUNNER_TEMP/obj/$PROJECT.o" \
+            --cache-dir "$RUNNER_TEMP/zig-cache"
+
+          for file in index.html main.js main.wasm sources.tar; do
+            if [ ! -s "$site/$file" ]; then
+              echo "::error::$PROJECT: autodoc did not emit $file"
+              exit 1
+            fi
+          done
+
+          # autodoc tars the entire std module into sources.tar: ~17 MiB per
+          # library, downloaded by every visitor before the page renders. The
+          # search index and declaration tree live in main.wasm, so keeping
+          # only the library's own sources costs nothing except std's [src]
+          # views.
+          strip="$RUNNER_TEMP/sources-$PROJECT"
+          mkdir -p "$strip"
+          tar -xf "$site/sources.tar" -C "$strip" --exclude='std/*'
+          if [ -z "$(ls -A "$strip")" ]; then
+            echo "::error::$PROJECT: sources.tar held nothing but std"
+            exit 1
+          fi
+          tar -cf "$site/sources.tar" -C "$strip" $(ls "$strip")
+          du -sh "$site"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docs-${{ matrix.project.name }}
+          path: ${{ runner.temp }}/site/${{ matrix.project.name }}
+          retention-days: 1
+
+  deploy:
+    name: Publish
+    needs: [config, build]
+    # Publish even when a library leg failed; a partial site beats a stale one.
+    if: always()
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: docs-*
+          path: site
+          merge-multiple: true
+
+      - name: Generate landing page
+        run: |
+          set -euo pipefail
+          if [ ! -d site ]; then
+            echo "::error::no library built; refusing to publish an empty site"
+            exit 1
+          fi
+          node scripts/build-index.mjs site projects.json
+          cp CNAME site/CNAME
+          touch site/.nojekyll
+          ls -la site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

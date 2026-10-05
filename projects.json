@@ -1,0 +1,147 @@
+[
+  {
+    "name": "libvaxis",
+    "repo": "CoffeeImpliesCode/libvaxis",
+    "ref": "main",
+    "root": "src/main.zig",
+    "fork_of": "rockorager/libvaxis",
+    "description": "Terminal UI library, forked for image support."
+  },
+  {
+    "name": "notui",
+    "repo": "CoffeeImpliesCode/notui",
+    "ref": "main",
+    "root": "src/root.zig",
+    "description": "Inline-first terminal UI toolkit."
+  },
+  {
+    "name": "ocean",
+    "repo": "CoffeeImpliesCode/ocean",
+    "ref": "main",
+    "root": "src/ocean/root.zig",
+    "description": "Ocean v1 compiler infrastructure."
+  },
+  {
+    "name": "ozai",
+    "repo": "CoffeeImpliesCode/ozai",
+    "ref": "main",
+    "root": "src/root.zig",
+    "description": "Dial a node by its id, not its address. A Zig 0.16 reimplementation of the iroh P2P stack."
+  },
+  {
+    "name": "predicates",
+    "repo": "CoffeeImpliesCode/predicates",
+    "ref": "main",
+    "root": "src/root.zig",
+    "description": "Shewchuk fast robust geometric predicates with a Zig package, facade and cross-target check."
+  },
+  {
+    "name": "random123",
+    "repo": "CoffeeImpliesCode/random123",
+    "ref": "main",
+    "root": "root.zig",
+    "description": "Random123 counter-based RNG headers packaged for Zig 0.16."
+  },
+  {
+    "name": "simd",
+    "repo": "CoffeeImpliesCode/simd",
+    "ref": "main",
+    "root": "src/root.zig",
+    "description": "SIMD byte operations, UTF-8 checks, structural indexes, validated token tapes and streaming parsers."
+  },
+  {
+    "name": "skript",
+    "repo": "CoffeeImpliesCode/skript",
+    "ref": "main",
+    "root": "src/root.zig",
+    "description": "Typed Lisp compiler, register VM and tensor runtime."
+  },
+  {
+    "name": "topology",
+    "repo": "CoffeeImpliesCode/topology",
+    "ref": "main",
+    "root": "src/root.zig",
+    "description": "FRep geometry kernel and Vulkan mesh viewer."
+  },
+  {
+    "name": "translate-rust",
+    "repo": "CoffeeImpliesCode/translate-rust",
+    "ref": "main",
+    "root": "src/root.zig",
+    "description": "Research project translating a Rust subset into standalone Zig packages."
+  },
+  {
+    "name": "tree-sitter-skript",
+    "repo": "CoffeeImpliesCode/tree-sitter-skript",
+    "ref": "main",
+    "root": "bindings/zig/root.zig",
+    "description": "Tree-sitter grammar for Skript."
+  },
+  {
+    "name": "zautomerge",
+    "repo": "CoffeeImpliesCode/zautomerge",
+    "ref": "main",
+    "root": "src/root.zig",
+    "description": "A direct Zig translation of the automerge CRDT library."
+  },
+  {
+    "name": "zbc",
+    "repo": "CoffeeImpliesCode/zbc",
+    "ref": "main",
+    "root": "src/lib.zig",
+    "fork_of": "ericsssan/zbc",
+    "description": "A deep static analyzer for Zig."
+  },
+  {
+    "name": "zig-agent-proto",
+    "repo": "CoffeeImpliesCode/zig-agent-proto",
+    "ref": "main",
+    "root": "src/root.zig",
+    "description": "Interface library and runtime for the agent wire protocols (MCP, A2A, ACP)."
+  },
+  {
+    "name": "zig-interval",
+    "repo": "CoffeeImpliesCode/zig-interval",
+    "ref": "main",
+    "root": "src/root.zig",
+    "description": "Rigorous interval arithmetic: guaranteed-enclosure scalar and vector operations, and a Fourier-Motzkin solver."
+  },
+  {
+    "name": "zig-ndk",
+    "repo": "CoffeeImpliesCode/zig-ndk",
+    "ref": "main",
+    "root": "root.zig",
+    "description": "Android NDK integration for Zig 0.16: discovery, sysroot layout facts and bionic libc wiring."
+  },
+  {
+    "name": "zgui",
+    "repo": "CoffeeImpliesCode/zgui",
+    "ref": "main",
+    "root": "src/gui.zig",
+    "fork_of": "zig-gamedev/zgui",
+    "description": "Build package and bindings for Dear ImGui, with optional extras."
+  },
+  {
+    "name": "zio",
+    "repo": "CoffeeImpliesCode/zio",
+    "ref": "main",
+    "root": "src/zio.zig",
+    "fork_of": "lalinsky/zio",
+    "description": "Async I/O framework for Zig."
+  },
+  {
+    "name": "zmath",
+    "repo": "CoffeeImpliesCode/zmath",
+    "ref": "main",
+    "root": "src/root.zig",
+    "description": "IEEE-754 and scalar mathematics for f16/f32/f64, with a portable @Vector layer."
+  },
+  {
+    "name": "zwanzig",
+    "repo": "CoffeeImpliesCode/zwanzig",
+    "ref": "main",
+    "root": "src/lib.zig",
+    "fork_of": "forketyfork/zwanzig",
+    "description": "A static analyzer and linter for Zig."
+  }
+]

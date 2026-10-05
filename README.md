@@ -1,72 +1,116 @@
-# apollo-typst
+# coffeeimpliescode.com — Zig autodoc
 
-Typst static site template based on [Zola](https://getzola.org), [typst.ts](https://github.com/Myriad-Dreamin/typst.ts), and [apollo](https://github.com/not-matthias/apollo). See a live preview [here](https://dark-flames.com).
+This repository is the source of [coffeeimpliescode.com](https://coffeeimpliescode.com).
+It no longer contains the old blog. It builds **Zig autodoc** for a list of Zig
+libraries and publishes the result to GitHub Pages.
 
-## Features
+## How publishing works
 
-- Full functionality of [Zola](https://getzola.org) and [apollo](https://github.com/not-matthias/apollo).
-- Supports both markdown and [typst](https://typst.app/).
+`.github/workflows/docs.yml` runs one matrix leg per entry in `projects.json`:
 
-## Usage
+1. check the library repository out at its configured ref,
+2. build its autodoc with Zig 0.16.0 —
+   `zig build-obj <library root> -femit-docs=<dir>`,
+3. strip the `std` module out of `sources.tar`,
+4. upload the four-file bundle (`index.html`, `main.js`, `main.wasm`,
+   `sources.tar`) as an artifact.
 
-### Preparation
+The `deploy` job downloads every artifact, writes a landing page with
+`scripts/build-index.mjs`, and deploys with `actions/deploy-pages`. Each library gets
+its own subdirectory, so one site serves all of them.
 
-- Install `yarn` and execute `yarn install`.
-- Install `zola` following its [document](https://www.getzola.org/documentation/getting-started/installation/).
-- Install `typst-ts-cli` following its [document](https://github.com/Myriad-Dreamin/typst.ts/tree/main?tab=readme-ov-file#concept-precompiler).
-- Configure your site in `config.toml`. Full configuration options can be found in the [apollo documentation](https://github.com/not-matthias/apollo/blob/main/content/posts/configuration.md).
+No build-system cooperation is needed: `zig build-obj` with `-femit-docs` ignores
+`build.zig` entirely, which is why the pipeline does not call `zig build docs` at all.
 
-### Write posts with Typst
+A library whose build fails does not cancel the other legs (`fail-fast: false`) and
+does not block the deploy (`if: always()`). Its row on the landing page is rendered
+as missing, so a broken library is visible instead of silently absent.
 
-- `appollo-typst` support both single files and workspaces:
+Runs are triggered by a push to `main`, weekly on Mondays, and by manual dispatch.
 
-  - If a subdirectory of typ contains `main.typ`, it will be treated as a workspace, with `main.typ` serving as the entry point. 
+## Adding a library
 
-  - Otherwise, each .typ file within the subdirectory will be compiled independently.
+Append an entry to `projects.json`:
 
-- Create a `.md` file in the `content` directory and write the metadata of the post in the front matter. Then, add the `extra.typst` field to the front matter, specifying the name (relative path to `typ/`) of the typst file or the typst workspace. The content of the markdown file will be ignored; instead, the content from the typst file will be utilized. For an example, refer to `content/posts/test.md`.
-
-- If the typst output has its own title, you can set `extra.hide_title = true` to prevent zola from generating a redundant title.
-
-### Build
-
-```shell
-# If you updated the frontend
-yarn build:fe
-# If you updated the typst
-yarn build:typ
-# Final zola build
-zola build
+```json
+{
+  "name": "zmath",
+  "repo": "CoffeeImpliesCode/zmath",
+  "ref": "main",
+  "root": "src/root.zig",
+  "description": "IEEE-754 and scalar mathematics for f16/f32/f64."
+}
 ```
 
-### Develop
+| field | meaning |
+|---|---|
+| `name` | URL segment and artifact name; must be unique |
+| `repo` | `owner/name` on GitHub |
+| `ref` | branch, tag, or commit to document |
+| `root` | library root source file, relative to the repository root |
+| `fork_of` | optional; upstream repository, shown on the landing page |
+| `description` | one line shown on the landing page |
 
-```shell
-yarn serve
+`root` must be the source file of the module registered under the package's
+`build.zig.zon` `.name` — read it off `b.addModule("<name>", .{ .root_source_file = ... })`
+in that project's `build.zig`. Do **not** use an executable root: `build-obj` has no
+package manager, so a root that imports a module by name (`@import("zmath")`) fails
+with `no module named 'zmath' available within module 'main'`.
+
+Verify a candidate locally before adding it:
+
+```sh
+git clone --depth 1 https://github.com/OWNER/REPO && cd REPO
+zig build-obj src/root.zig -femit-docs=/tmp/docs -femit-bin=/tmp/repo.o
 ```
 
-### Deployment
+Exit status is the only gate that matters. Autodoc writes all four files even when
+semantic analysis fails, and `index.html`, `main.js` and `main.wasm` are byte-identical
+boilerplate for every project — the per-project content is entirely in
+`sources.tar`.
 
-To deploy your site to GitHub Pages, you can use the provided GitHub Action in branch `action-v1`:
+## Why `sources.tar` is stripped
 
-Example .github/workflows/deployl.yaml
+Zig's autodoc tars the **whole standard library** into every `sources.tar`: about
+17 MiB per library, fetched by every visitor before the page renders anything. The
+search index and the declaration tree live in `main.wasm`, so the workflow keeps only
+the library's own sources. The trade-off is that the `[src]` view of `std`
+declarations is empty; everything else, including searching std, is unaffected.
 
-```yaml
-name: Deploy
+## Not published, and why
 
-on: workflow_dispatch
+Every repository below was tested against Zig 0.16.0 and left out because the build
+failed. Re-test the fix, then add the entry.
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-      - name: deploy
-        uses: dark-flames/apollo-typst@action-v1
-        with:
-          access-token: ${{ secrets.ACCESS_TOKEN }}
-          deploy-branch: static
-        # deploy-repo: ${{ another/repo }}
+| repository | reason |
+|---|---|
+| `kernel` | `src/gates.zig:274:42: error: no module named 'build_options' available within module 'kernel'` |
+| `ziglint` | `src/main.zig:4:31: error: no module named 'build_options' available within module 'main'` |
+| `zopengl` | `src/zopengl.zig:5:31: error: no module named 'build_options' available within module 'zopengl'` |
+| `zcov` | `lib/std/c.zig:11013:12: error: dependency on libc must be explicitly specified` |
+| `zemscripten` | `src/zemscripten.zig:6:20: error: root source file struct 'testing' has no member named 'refAllDeclsRecursive'` |
+| `zeichnung` | `src/main.zig:87:23: error: root source file struct 'heap' has no member named 'GeneralPurposeAllocator'` |
+| `zmath-testing` | its only library-shaped root is a leftover `zig init` stub, so autodoc would publish an empty API |
+| `tinyfold` | no `build.zig` on the default branch |
+| `foundation` | no Zig source at all — a Markdown research repository |
+| `nogui`, `noapi`, `zla` | build fine locally but are not published under `CoffeeImpliesCode`, so CI cannot check them out |
+
+`kernel`, `ziglint`, `zopengl` and `zcov` need their module graph, which means either
+a `docs` step in their own `build.zig` (`b.addObject(...).getEmittedDocs()`) or a root
+that avoids the generated module.
+
+## Serving autodoc locally
+
+Autodoc pages cannot be opened from the filesystem — `main.js` fetches and
+instantiates `main.wasm`, which requires HTTP:
+
+```sh
+zig build-obj src/root.zig -femit-docs=docs
+python3 -m http.server -d docs
 ```
-If you want to use custom page, remember to put `CNAME` file in the `static/`.
+
+## Old blog
+
+The previous apollo-typst site is preserved on the `static` branch, unchanged, with
+its last deployment from 2026-03-09. History before this rewrite is intact in
+`git log main`.
