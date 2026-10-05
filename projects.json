@@ -45,7 +45,7 @@
   {
     "name": "simd",
     "repo": "CoffeeImpliesCode/simd",
-    "ref": "main",
+    "ref": "master",
     "root": "src/root.zig",
     "description": "SIMD byte operations, UTF-8 checks, structural indexes, validated token tapes and streaming parsers."
   },
@@ -55,13 +55,6 @@
     "ref": "main",
     "root": "src/root.zig",
     "description": "Typed Lisp compiler, register VM and tensor runtime."
-  },
-  {
-    "name": "topology",
-    "repo": "CoffeeImpliesCode/topology",
-    "ref": "main",
-    "root": "src/root.zig",
-    "description": "FRep geometry kernel and Vulkan mesh viewer."
   },
   {
     "name": "translate-rust",

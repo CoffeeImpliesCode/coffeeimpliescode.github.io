@@ -100,6 +100,7 @@ failed. Re-test the fix, then add the entry.
 | `zemscripten` | `src/zemscripten.zig:6:20: error: root source file struct 'testing' has no member named 'refAllDeclsRecursive'` |
 | `zeichnung` | `src/main.zig:87:23: error: root source file struct 'heap' has no member named 'GeneralPurposeAllocator'` |
 | `zmath-testing` | its only library-shaped root is a leftover `zig init` stub, so autodoc would publish an empty API |
+| `topology` | the repository is empty — no commits have ever been pushed, so there is nothing to check out |
 | `tinyfold` | no `build.zig` on the default branch |
 | `foundation` | no Zig source at all — a Markdown research repository |
 | `nogui`, `noapi`, `zla` | build fine locally but are not published under `CoffeeImpliesCode`, so CI cannot check them out |
