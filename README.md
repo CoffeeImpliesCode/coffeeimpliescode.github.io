@@ -69,6 +69,29 @@ semantic analysis fails, and `index.html`, `main.js` and `main.wasm` are byte-id
 boilerplate for every project — the per-project content is entirely in
 `sources.tar`.
 
+## Private repositories
+
+`projects.json` currently lists only the **public** libraries. The default
+`GITHUB_TOKEN` cannot read any other repository, private or not, so a private entry
+fails at checkout with `Repository not found`.
+
+These repositories build autodoc fine and only need cross-repository access:
+
+`notui`, `ocean`, `ozai`, `predicates`, `random123`, `simd`, `skript`, `topology`,
+`translate-rust`, `zautomerge`, `zig-agent-proto`, `zig-interval`, `zig-ndk`,
+`zmath`.
+
+To publish them, add a `DOCS_TOKEN` repository secret holding a token with access to
+those repositories (a classic PAT with `repo` scope, or a fine-grained token with
+*Contents: read* on each one). The checkout step already reads it:
+
+```yaml
+token: ${{ secrets.DOCS_TOKEN || github.token }}
+```
+
+Then move the entries back into `projects.json`. Note that their documentation becomes
+readable by anyone on the site, private repository or not.
+
 ## Why `sources.tar` is stripped
 
 Zig's autodoc tars the **whole standard library** into every `sources.tar`: about

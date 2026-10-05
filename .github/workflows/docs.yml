@@ -46,6 +46,9 @@ jobs:
           repository: ${{ matrix.project.repo }}
           ref: ${{ matrix.project.ref }}
           path: checkout/${{ matrix.project.name }}
+          # Private library repositories need a token with cross-repository
+          # access; the default GITHUB_TOKEN only sees this repository.
+          token: ${{ secrets.DOCS_TOKEN || github.token }}
 
       - uses: mlugg/setup-zig@v2
         with:
